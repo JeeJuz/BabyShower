@@ -20,7 +20,7 @@
 
 
     <audio id="bgMusic">
-        <source src="I Always (Instrumental).mp3" type="audio/mpeg">
+        <source src="Naruto OST 2 - Fooling Mode.mp3" type="audio/mpeg">
     </audio>
 
     <div id="randomSheep" class="jumping-sheep">
@@ -28,6 +28,11 @@
     </div>
 
     <header>
+        <img src="cloud.png" class="header-cloud h-cloud1">
+        <img src="cloud.png" class="header-cloud h-cloud2">
+        <img src="cloud.png" class="header-cloud h-cloud3">
+
+
         <h1>Pachia's Baby Shower 2026</h1>
         <p>Please join us to celebrate both Jee and Pachia's baby shower.</p>
     </header>
@@ -52,6 +57,14 @@
             <img src="sheep1.png" alt="Sheep" class="sheep-icon">
             <img src="sheep1.png" alt="Sheep" class="sheep-icon">
         </section>
+
+        <div class="cloud-container">
+    <img src="cloud.png" class="cloud-img cloud1">
+    <img src="cloud.png" class="cloud-img cloud2">
+    <img src="cloud.png" class="cloud-img cloud3">
+    <img src="cloud.png" class="cloud-img cloud4">
+    <img src="cloud.png" class="cloud-img cloud5">
+</div>
     </main>
 
     <div id="detailsModal" class="modal">
@@ -71,7 +84,7 @@
     <div id="registryModal" class="modal">
         <div class="modal-content">
             <h2>A Little Note</h2>
-            <p>"Items are and will be appreciated, but there isn't a need to get it. You being there is already awesome!"</p>
+            <p>Items are and will be appreciated, but there is no need to get it. You being there is already awesome!</p>
             <div class="button-group">
                 <button class="pink-btn" onclick="closeAllModals()">Close</button>
                 <button class="pink-btn" onclick="goToRegistry()">Go to Registry</button>
@@ -89,11 +102,11 @@ const music = document.getElementById("bgMusic");
 
     function playMusic() {
         if (music && music.paused) {
-            music.volume = 1.0;
+            music.volume = 0.3;
             music.play().catch(err => console.log("Playback blocked"));
             
             music.ontimeupdate = function() {
-                if (music.currentTime >= 55 && music.currentTime < 260) {
+                if (music.currentTime >= 255 && music.currentTime < 260) {
                     music.volume = Math.max(0, 1.0 - (music.currentTime - 27) / 3);
                 }
                 if (music.currentTime >= 260) { music.pause(); }
