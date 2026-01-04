@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pachia's Baby Shower 2026</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="welcomeOverlay" class="welcome-screen">
+    <div class="left-panel"></div>
+    <div class="right-panel"></div>
+    <div class="welcome-content">
+        <h1>Welcome to Pachia's Baby Shower!</h1>
+        <p>Click to enter and celebrate with us</p>
+        <button class="pink-btn" onclick="startEverything()">Enter</button>
+    </div>
+</div>
+
+
+    <audio id="bgMusic">
+        <source src="I Always (Instrumental).mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="randomSheep" class="jumping-sheep">
+        <img src="sheep1.png" alt="Jumping Sheep" class="sheep-icon">
+    </div>
+
+    <header>
+        <h1>Pachia's Baby Shower 2026</h1>
+        <p>Please join us to celebrate both Jee and Pachia's baby shower.</p>
+    </header>
+
+    <main class="container">
+        <section class="card">
+            <h2>About Our Little Sheep "Douachi Evelyn Vahchuama"</h2>
+            <p>Our little girl is still baking in the oven. She'll be ready to come out approximately on April 18th-20th.</p>
+            
+            <div class="card-content">
+                <img src="bread1.png" alt="Baking Bread" class="bread-img">
+            </div>
+
+<div class="button-group">
+    <button class="pink-btn" onclick="openDetails(this)">Details</button>
+    <button class="pink-btn" onclick="openRegistryNote(this)">Baby Registry</button>
+</div>
+        </section>
+
+        <section class="sheep-grid">
+            <img src="sheep1.png" alt="Sheep" class="sheep-icon">
+            <img src="sheep1.png" alt="Sheep" class="sheep-icon">
+            <img src="sheep1.png" alt="Sheep" class="sheep-icon">
+        </section>
+    </main>
+
+    <div id="detailsModal" class="modal">
+        <div class="modal-content">
+            <h2>Baby Shower Details</h2>
+            <p><strong>Date:</strong> March 21st 2026, Saturday</p>
+            <p><strong>Location:</strong> <a href="https://maps.google.com/?q=314+E+5th+Ave+%23210+Owasso+OK+74055" target="_blank" class="map-link">314 E 5th Ave #210, Owasso, OK 74055</a></p>
+            <img src="eventplace.png" alt="Event Place" class="event-img">
+            <br><br>
+            <button class="pink-btn" onclick="closeAllModals()">Close</button>
+        </div>
+    </div>
+
+    <div id="registryModal" class="modal">
+        <div class="modal-content">
+            <h2>A Little Note</h2>
+            <p>"Items are and will be appreciated, but there isn't a need to get it. You being there is already awesome!"</p>
+            <div class="button-group">
+                <button class="pink-btn" onclick="closeAllModals()">Close</button>
+                <button class="pink-btn" onclick="goToRegistry()">Go to Registry</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2026 JeeJuz</p>
+    </footer>
+
+    <script>
+        // --- MUSIC LOGIC ---
+const music = document.getElementById("bgMusic");
+
+    function playMusic() {
+        if (music && music.paused) {
+            music.volume = 1.0;
+            music.play().catch(err => console.log("Playback blocked"));
+            
+            music.ontimeupdate = function() {
+                if (music.currentTime >= 27 && music.currentTime < 30) {
+                    music.volume = Math.max(0, 1.0 - (music.currentTime - 27) / 3);
+                }
+                if (music.currentTime >= 30) { music.pause(); }
+            };
+        }
+    }
+
+    // 2. The Enter Button (Splits doors + Starts music)
+    function startEverything() {
+        document.getElementById("welcomeOverlay").classList.add('active');
+        playMusic();
+        setTimeout(() => {
+            document.getElementById("welcomeOverlay").style.display = 'none';
+        }, 1500);
+    }
+
+    // 3. Modal Controls (Now with music and note triggers)
+    function openDetails(btn) {
+        playMusic(); // Ensures music plays if they didn't hit enter
+        if(typeof createNote === "function") createNote(btn); 
+        document.getElementById("detailsModal").style.display = "block";
+    }
+
+    function openRegistryNote(btn) {
+        playMusic();
+        if(typeof createNote === "function") createNote(btn);
+        document.getElementById("registryModal").style.display = "block";
+    }
+
+    function closeAllModals() {
+        document.getElementById("detailsModal").style.display = "none";
+        document.getElementById("registryModal").style.display = "none";
+    }
+
+    function goToRegistry() {
+        window.open('https://my.babylist.com/baby-pachia-jee', '_blank');
+        closeAllModals();
+    }
+
+    // Close on background click
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) closeAllModals();
+    }
+
+        // --- BACKGROUND SHEEP JUMPING ---
+        const sheep = document.getElementById('randomSheep');
+        function jumpRandomly() {
+            const windowWidth = window.innerWidth - 150;
+            const groundLevel = window.innerHeight - 180;
+            const jumpHeight = 200;
+            const randomX = Math.floor(Math.random() * windowWidth);
+
+            sheep.style.left = randomX + 'px';
+            sheep.style.top = (groundLevel - jumpHeight) + 'px';
+            sheep.style.transform = `rotate(-15deg)`;
+
+            setTimeout(() => {
+                sheep.style.top = groundLevel + 'px';
+                sheep.style.transform = `rotate(0deg)`;
+            }, 750);
+
+            setTimeout(jumpRandomly, Math.random() * 1000 + 2000);
+        }
+        jumpRandomly();
+
+        // --- CLICK TO DROP MINI SHEEP ---
+        window.addEventListener('click', function(e) {
+            if (e.target.tagName === 'BUTTON' || e.target.closest('.modal-content')) return;
+            
+            const miniSheep = document.createElement('img');
+            miniSheep.src = 'sheep1.png'; 
+            miniSheep.className = 'mini-sheep';
+            miniSheep.style.left = (e.pageX - 20) + 'px';
+            miniSheep.style.top = (e.pageY - 20) + 'px';
+            miniSheep.style.transform = `rotate(${Math.floor(Math.random() * 60) - 30}deg)`;
+            document.body.appendChild(miniSheep);
+            setTimeout(() => miniSheep.remove(), 2000);
+        });
+
+        // --- GLOBAL CLICK TO CLOSE MODALS ---
+        window.onclick = function(event) {
+            if (event.target.className === 'modal') {
+                closeAllModals();
+            }
+        }
+    </script>
+</body>
+</html>
