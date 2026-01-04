@@ -13,7 +13,7 @@
     <div class="right-panel"></div>
     <div class="welcome-content">
         <h1>Welcome to Pachia's Baby Shower!</h1>
-        <p>Click to enter and celebrate with us</p>
+        <p>Click Enter to join and celebrate with us</p>
         <button class="pink-btn" onclick="startEverything()">Enter</button>
     </div>
 </div>
@@ -38,7 +38,7 @@
             <p>Our little girl is still baking in the oven. She'll be ready to come out approximately on April 18th-20th.</p>
             
             <div class="card-content">
-                <img src="bread1.png" alt="Baking Bread" class="bread-img">
+                <img src="Baby.png" alt="Baking Bread" class="bread-img">
             </div>
 
 <div class="button-group">
@@ -58,6 +58,9 @@
         <div class="modal-content">
             <h2>Baby Shower Details</h2>
             <p><strong>Date:</strong> March 21st 2026, Saturday</p>
+            <p><strong>Time:</strong> 1:00PM - 4:00PM</p>
+            <p><strong>Parking:</strong> The whole parking lot</p>
+
             <p><strong>Location:</strong> <a href="https://maps.google.com/?q=314+E+5th+Ave+%23210+Owasso+OK+74055" target="_blank" class="map-link">314 E 5th Ave #210, Owasso, OK 74055</a></p>
             <img src="eventplace.png" alt="Event Place" class="event-img">
             <br><br>
@@ -90,10 +93,10 @@ const music = document.getElementById("bgMusic");
             music.play().catch(err => console.log("Playback blocked"));
             
             music.ontimeupdate = function() {
-                if (music.currentTime >= 27 && music.currentTime < 30) {
+                if (music.currentTime >= 55 && music.currentTime < 260) {
                     music.volume = Math.max(0, 1.0 - (music.currentTime - 27) / 3);
                 }
-                if (music.currentTime >= 30) { music.pause(); }
+                if (music.currentTime >= 260) { music.pause(); }
             };
         }
     }

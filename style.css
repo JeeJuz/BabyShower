@@ -57,7 +57,7 @@ footer {
 }
 
 .bread-img, .event-img {
-    max-width: 250px;
+    max-width: 300px;
     width: 100%;
     border-radius: 15px;
 }
@@ -114,14 +114,33 @@ footer {
 .modal-content {
     background-color: white;
     margin: 10% auto;
-    padding: 30px;
+    padding: 20px; /* Reduced padding for more room */
     border-radius: 20px;
-    width: 85%;
+    width: 90%; /* Occupies more screen width on small devices */
     max-width: 500px;
     text-align: center;
     position: relative;
     box-shadow: 0 5px 15px rgba(0,0,0,0.3);
     animation: modalPop 0.3s ease-out;
+    box-sizing: border-box; /* IMPORTANT: Keeps padding inside the width */
+}
+
+/* Specific Mobile Fixes */
+@media (max-width: 600px) {
+    header h1 { font-size: 1.5rem; }
+    
+    .modal-content { 
+        margin: 15% auto; 
+        width: 95%; /* Almost full width on tiny screens */
+        padding: 15px; 
+    }
+
+    .event-img, .bread-img {
+        max-width: 100%; /* Ensures images never push the modal wider than the screen */
+        height: auto;
+    }
+
+    .sheep-icon { width: 100px; } 
 }
 
 .close-btn {
@@ -156,11 +175,12 @@ footer {
 .left-panel, .right-panel {
     position: absolute;
     top: 0;
-    width: 50%;
+    width: 50.5%; /* Change this from 50% to 50.5% */
     height: 100%;
-    background-color: #ffdae9; /* Matches your theme */
+    background-color: #ffdae9; 
     transition: transform 1.2s cubic-bezier(0.7, 0, 0.3, 1);
     z-index: -1;
+    border: none !important; /* Add this just to be safe */
 }
 
 .left-panel { left: 0; }
