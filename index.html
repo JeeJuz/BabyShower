@@ -49,6 +49,7 @@
 <div class="button-group">
     <button class="pink-btn" onclick="openDetails(this)">Details</button>
     <button class="pink-btn" onclick="openRegistryNote(this)">Baby Registry</button>
+    <button class="pink-btn" onclick="openRSVP(this)">RSVP</button>
 </div>
         </section>
 
@@ -70,7 +71,7 @@
     <div id="detailsModal" class="modal">
         <div class="modal-content">
             <h2>Baby Shower Details</h2>
-            <p>No RSVP, if you can make it to the shower, that would be awesome. If not, no hard feelings, just come visit the little girl when she's out!</p>
+            <p>Don't forget to RSVP if you are coming! Hope you see you there!</p>
             <p><strong>Date:</strong> March 21st 2026, Saturday</p>
             <p><strong>Time:</strong> 12:00PM - 3:00PM</p>
             <p><strong>Parking:</strong> The whole parking lot</p>
@@ -97,9 +98,9 @@
         <p>© 2026 | JeeJuz</p>
     </footer>
 
-    <script>
-        // --- MUSIC LOGIC ---
-const music = document.getElementById("bgMusic");
+<script>
+    // 1. --- MUSIC LOGIC ---
+    const music = document.getElementById("bgMusic");
 
     function playMusic() {
         if (music && music.paused) {
@@ -107,15 +108,19 @@ const music = document.getElementById("bgMusic");
             music.play().catch(err => console.log("Playback blocked"));
             
             music.ontimeupdate = function() {
+                // Fades out at the 4 minute 15 second mark
                 if (music.currentTime >= 255 && music.currentTime < 260) {
-                    music.volume = Math.max(0, 1.0 - (music.currentTime - 27) / 3);
+                    music.volume = Math.max(0, 0.3 - (music.currentTime - 255) / 5);
                 }
-                if (music.currentTime >= 260) { music.pause(); }
+                if (music.currentTime >= 260) { 
+                    music.pause(); 
+                    music.currentTime = 0;
+                }
             };
         }
     }
 
-    // 2. The Enter Button (Splits doors + Starts music)
+    // 2. --- BUTTON & MODAL FUNCTIONS ---
     function startEverything() {
         document.getElementById("welcomeOverlay").classList.add('active');
         playMusic();
@@ -124,9 +129,8 @@ const music = document.getElementById("bgMusic");
         }, 1500);
     }
 
-    // 3. Modal Controls (Now with music and note triggers)
     function openDetails(btn) {
-        playMusic(); // Ensures music plays if they didn't hit enter
+        playMusic();
         if(typeof createNote === "function") createNote(btn); 
         document.getElementById("detailsModal").style.display = "block";
     }
@@ -135,6 +139,17 @@ const music = document.getElementById("bgMusic");
         playMusic();
         if(typeof createNote === "function") createNote(btn);
         document.getElementById("registryModal").style.display = "block";
+    }
+
+    function openRSVP(btn) {
+        playMusic(); // Changed from startMusicLogic to playMusic
+        if(typeof createNote === "function") createNote(btn);
+
+        const rsvpLink = "https://docs.google.com/forms/d/e/1FAIpQLSfIaLtaVO8HdH7nDRaAhTSvLXDudTD9hkUcID0r45cpnDXZXw/viewform?usp=dialog";
+        
+        setTimeout(() => {
+            window.open(rsvpLink, '_blank');
+        }, 200);
     }
 
     function closeAllModals() {
@@ -147,52 +162,48 @@ const music = document.getElementById("bgMusic");
         closeAllModals();
     }
 
-    // Close on background click
-    window.onclick = function(event) {
-        if (event.target.classList.contains('modal')) closeAllModals();
-    }
+    // 3. --- BACKGROUND SHEEP JUMPING ---
+    const sheep = document.getElementById('randomSheep');
+    function jumpRandomly() {
+        const windowWidth = window.innerWidth - 150;
+        const groundLevel = window.innerHeight - 180;
+        const jumpHeight = 200;
+        const randomX = Math.floor(Math.random() * windowWidth);
 
-        // --- BACKGROUND SHEEP JUMPING ---
-        const sheep = document.getElementById('randomSheep');
-        function jumpRandomly() {
-            const windowWidth = window.innerWidth - 150;
-            const groundLevel = window.innerHeight - 180;
-            const jumpHeight = 200;
-            const randomX = Math.floor(Math.random() * windowWidth);
+        sheep.style.left = randomX + 'px';
+        sheep.style.top = (groundLevel - jumpHeight) + 'px';
+        sheep.style.transform = `rotate(-15deg)`;
 
-            sheep.style.left = randomX + 'px';
-            sheep.style.top = (groundLevel - jumpHeight) + 'px';
-            sheep.style.transform = `rotate(-15deg)`;
-
-            setTimeout(() => {
+        setTimeout(() => {
+            if(sheep) {
                 sheep.style.top = groundLevel + 'px';
                 sheep.style.transform = `rotate(0deg)`;
-            }, 750);
-
-            setTimeout(jumpRandomly, Math.random() * 1000 + 2000);
-        }
-        jumpRandomly();
-
-        // --- CLICK TO DROP MINI SHEEP ---
-        window.addEventListener('click', function(e) {
-            if (e.target.tagName === 'BUTTON' || e.target.closest('.modal-content')) return;
-            
-            const miniSheep = document.createElement('img');
-            miniSheep.src = 'sheep1.png'; 
-            miniSheep.className = 'mini-sheep';
-            miniSheep.style.left = (e.pageX - 20) + 'px';
-            miniSheep.style.top = (e.pageY - 20) + 'px';
-            miniSheep.style.transform = `rotate(${Math.floor(Math.random() * 60) - 30}deg)`;
-            document.body.appendChild(miniSheep);
-            setTimeout(() => miniSheep.remove(), 2000);
-        });
-
-        // --- GLOBAL CLICK TO CLOSE MODALS ---
-        window.onclick = function(event) {
-            if (event.target.className === 'modal') {
-                closeAllModals();
             }
+        }, 750);
+
+        setTimeout(jumpRandomly, Math.random() * 1000 + 2000);
+    }
+    jumpRandomly();
+
+    // 4. --- CLICK INTERACTIONS ---
+    window.onclick = function(event) {
+        // Close modals if background is clicked
+        if (event.target.classList.contains('modal')) {
+            closeAllModals();
         }
-    </script>
+
+        // Drop mini sheep logic
+        if (event.target.tagName === 'BUTTON' || event.target.closest('.modal-content')) return;
+        
+        const miniSheep = document.createElement('img');
+        miniSheep.src = 'sheep1.png'; 
+        miniSheep.className = 'mini-sheep';
+        miniSheep.style.left = (event.pageX - 20) + 'px';
+        miniSheep.style.top = (event.pageY - 20) + 'px';
+        miniSheep.style.transform = `rotate(${Math.floor(Math.random() * 60) - 30}deg)`;
+        document.body.appendChild(miniSheep);
+        setTimeout(() => miniSheep.remove(), 2000);
+    };
+</script>
 </body>
 </html>
